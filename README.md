@@ -1,9 +1,7 @@
 # uneviedefourmi
-exploration des structures nodales via un exemple de fourmilière
+exploration des structures nodales (pathing?) via un exemple de fourmilière.
 
-# Analyse du problème de déplacement de fourmis
-
-pathing optimisation:
+## analyse:
 
 1. **Structure de graphe**: La fourmilière est essentiellement un graphe où:
    - Les nœuds sont les salles (vestibule Sv, dortoir Sd, et salles intermédiaires)
@@ -22,7 +20,7 @@ pathing optimisation:
 
 Pour résoudre ce problème:
 
-1. Représente la fourmilière comme un graphe
-2. Utilise un algorithme de plus court chemin (comme BFS) pour déterminer les chemins optimaux
-3. Simule le déplacement des fourmis en respectant les contraintes
-4. Optimise l'ordre de déplacement des fourmis
+1. Représenter la fourmilière comme un graphe
+2. Utiliser un algorithme de plus court chemin (comme BFS) pour déterminer les chemins optimaux
+3. Simuler le déplacement des fourmis en respectant les contraintes
+4. Optimiser l'ordre de déplacement des fourmis

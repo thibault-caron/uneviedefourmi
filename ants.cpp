@@ -1,6 +1,9 @@
 #include "ants.hpp"
 #include <fstream>
 #include <sstream>
+#include <queue>
+#include <unordered_map>
+#include <algorithm>
 
 // Room implementation
 Room::Room(const std::string& id, int capacity) : id(id), capacity(capacity) {}
@@ -102,8 +105,65 @@ void AntColony::parseFile(const std::string& filename) {
 }
 
 void AntColony::findOptimalPaths() {
-    // Implementation would go here
-    // Use graph algorithms to find optimal paths for ants
+    // Use BFS to find shortest path from Sv to Sd
+    std::unordered_map<std::string, std::string> predecessor;
+    std::unordered_map<std::string, int> distance;
+    std::queue<std::string> queue;
+    
+    // Initialize all distances to infinity
+    for (const auto& room : rooms) {
+        distance[room.first] = std::numeric_limits<int>::max();
+    }
+    
+    // Start from vestibule
+    queue.push("Sv");
+    distance["Sv"] = 0;
+    
+    // BFS to find shortest paths
+    while (!queue.empty()) {
+        std::string current = queue.front();
+        queue.pop();
+        
+        // Found the dormitory, end the search
+        if (current == "Sd") {
+            break;
+        }
+        
+        // Check all adjacent rooms
+        for (const std::string& next : rooms[current].connections) {
+            if (distance[next] == std::numeric_limits<int>::max()) {
+                distance[next] = distance[current] + 1;
+                predecessor[next] = current;
+                queue.push(next);
+            }
+        }
+    }
+    
+    // If no path to dormitory was found
+    if (distance["Sd"] == std::numeric_limits<int>::max()) {
+        throw std::runtime_error("No path found from vestibule to dormitory");
+    }
+    
+    // Determine the shortest path for each ant
+    for (Ant& ant : ants) {
+        std::vector<std::string> path;
+        std::string current = "Sd";
+        
+        // Reconstruct path from predecessor map (backwards)
+        while (current != "Sv") {
+            path.push_back(current);
+            current = predecessor[current];
+        }
+        
+        // Reverse the path to get it in the right order (Sv to Sd)
+        std::reverse(path.begin(), path.end());
+        
+        // Store the path for this ant (without Sv which is the starting point)
+        ant.path = path;
+    }
+    
+    // Now we need to coordinate the ant movements based on room capacities
+    // This will be handled in simulateAntMovement()
 }
 
 void AntColony::simulateAntMovement() {
