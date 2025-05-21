@@ -12,6 +12,9 @@ public:
     int capacity;
     std::vector<std::string> connections;
     
+    // Add default constructor
+    Room() : id(""), capacity(0) {}
+    
     Room(const std::string& id, int capacity = 1);
     
     void addConnection(const std::string& roomId);

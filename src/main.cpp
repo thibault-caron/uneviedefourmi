@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include <vector>
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -14,23 +15,24 @@ int main(int argc, char* argv[]) {
     std::string inputPath = argv[1];
     std::string filename;
 
-    // First try the direct path
-    if (std::filesystem::exists(inputPath)) {
-        filename = inputPath;
-    } 
-    // Try with fourmilieres/ prefix
-    else if (inputPath.find('/') == std::string::npos && 
-             inputPath.find('\\') == std::string::npos) {
-        // If running from /src folder, we need to look one directory up
-        std::string withPrefix = "../fourmilieres/" + inputPath;
-        
-        if (std::filesystem::exists(withPrefix)) {
-            filename = withPrefix;
-        } else {
-            std::cerr << "Error: File not found: " << inputPath << std::endl;
-            return 1;
+    // Try several possible locations for the file
+    std::vector<std::string> possiblePaths = {
+        inputPath,                          // Direct input
+        "fourmilieres/" + inputPath,        // In fourmilieres subdirectory
+        "../fourmilieres/" + inputPath,     // Up one level then fourmilieres
+        "../../fourmilieres/" + inputPath,  // Up two levels then fourmilieres
+        "../" + inputPath,                  // Just up one level
+        "fourmiliere_" + inputPath          // Try with prefix
+    };
+
+    for (const auto& path : possiblePaths) {
+        if (std::filesystem::exists(path)) {
+            filename = path;
+            break;
         }
-    } else {
+    }
+
+    if (filename.empty()) {
         std::cerr << "Error: File not found: " << inputPath << std::endl;
         return 1;
     }

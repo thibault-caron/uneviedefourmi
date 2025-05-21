@@ -1,6 +1,18 @@
 # uneviedefourmi
 exploration des structures nodales (pathing?) via un exemple de fourmilière.
 
+## how to use:
+
+1. open a terminal
+2. use 'cd' to go to the project folder "uneviedefourmi" (or open a terminal directly from that folder)
+3. in the terminal launch the .exe: write 'ant_colony.exe' (or './ant_colony' with Powershell) followed by the .txt file of the ant colony you wish to use
+
+Exemple:
+
+```bash
+.\ant_colony fourmiliere_cinq.txt
+```
+
 ## analyse:
 
 1. **Structure de graphe**: La fourmilière est essentiellement un graphe où:
