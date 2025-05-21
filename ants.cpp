@@ -3,7 +3,8 @@
 #include <sstream>
 #include <queue>
 #include <unordered_map>
-#include <algorithm>
+#include <algorithm> // for std::reverse
+#include <limits>
 
 // Room implementation
 Room::Room(const std::string& id, int capacity) : id(id), capacity(capacity) {}

@@ -1,4 +1,4 @@
-#include "ant_colony.h"
+#include "ants.hpp"
 #include <iostream>
 #include <string>
 
