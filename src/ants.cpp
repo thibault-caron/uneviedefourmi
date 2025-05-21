@@ -40,6 +40,7 @@ void AntColony::parseFile(const std::string& filename) {
         // Parse the f=X format
         if (line.substr(0, 2) == "f=") {
             antCount = std::stoi(line.substr(2));
+            std::cout << "Parsed ant count: " << antCount << std::endl;
         } else {
             throw std::runtime_error("Invalid file format: missing ant count");
         }
@@ -70,14 +71,17 @@ void AntColony::parseFile(const std::string& filename) {
             // Make sure both rooms exist
             if (rooms.find(room1) == rooms.end()) {
                 rooms[room1] = Room(room1);
+                std::cout << "Created room from connection: " << room1 << std::endl;
             }
             if (rooms.find(room2) == rooms.end()) {
                 rooms[room2] = Room(room2);
+                std::cout << "Created room from connection: " << room2 << std::endl;
             }
             
             // Add bidirectional connections
             rooms[room1].addConnection(room2);
             rooms[room2].addConnection(room1);
+            std::cout << "Added connection: " << room1 << " - " << room2 << std::endl;
         } 
         // Room definition
         else {
@@ -93,17 +97,22 @@ void AntColony::parseFile(const std::string& filename) {
                 size_t closeBrace = line.find("}");
                 std::string capacityStr = line.substr(openBrace + 1, closeBrace - openBrace - 1);
                 capacity = std::stoi(capacityStr);
+                std::cout << "Room with capacity: " << roomId << " {" << capacity << "}" << std::endl;
             }
             
             // Create room if it doesn't exist already
             if (rooms.find(roomId) == rooms.end()) {
                 rooms[roomId] = Room(roomId, capacity);
+                std::cout << "Created room: " << roomId << std::endl;
             } else {
                 // Update capacity if room already exists
                 rooms[roomId].capacity = capacity;
+                std::cout << "Updated room capacity: " << roomId << " to " << capacity << std::endl;
             }
         }
     }
+    
+    std::cout << "Parsing complete. Found " << rooms.size() << " rooms and " << antCount << " ants." << std::endl;
 }
 
 void AntColony::findOptimalPaths() {
