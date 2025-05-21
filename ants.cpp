@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <algorithm> // for std::reverse
 #include <limits>
+#include <iostream>
 
 // Room implementation
 Room::Room(const std::string& id, int capacity) : id(id), capacity(capacity) {}
@@ -168,16 +169,190 @@ void AntColony::findOptimalPaths() {
 }
 
 void AntColony::simulateAntMovement() {
-    // Implementation would go here
-    // Simulate the movement of ants through the colony
+    // Structure to track room occupancy at each step
+    std::unordered_map<std::string, int> roomOccupancy;
+    
+    // Initialization: all ants are in the vestibule
+    bool allAntsInDormitory = false;
+    std::vector<bool> antReachedDormitory(ants.size(), false);
+    
+    // Continue until all ants reach the dormitory
+    int stepCount = 0;
+    
+    while (!allAntsInDormitory) {
+        stepCount++;
+        
+        // Movements for this step
+        std::vector<std::pair<int, std::string>> currentStepMoves;
+        
+        // Reset room occupancy for this step
+        roomOccupancy.clear();
+        
+        // Temporary data to simulate movements for this step
+        std::vector<std::string> nextRooms(ants.size());
+        std::vector<bool> antMoved(ants.size(), false);
+        
+        // Phase 1: determine where each ant wants to go
+        for (size_t i = 0; i < ants.size(); i++) {
+            // If ant is already in dormitory, skip
+            if (antReachedDormitory[i]) {
+                continue;
+            }
+            
+            Ant& ant = ants[i];
+            
+            // If ant is in vestibule and has a path
+            if (ant.currentRoom == "Sv" && !ant.path.empty()) {
+                nextRooms[i] = ant.path[0];
+            }
+            // If ant is in an intermediate room
+            else if (ant.currentRoom != "Sd" && ant.currentRoom != "Sv") {
+                // Find current position in path
+                auto currentPosInPath = std::find(ant.path.begin(), ant.path.end(), ant.currentRoom);
+                
+                if (currentPosInPath != ant.path.end() && std::next(currentPosInPath) != ant.path.end()) {
+                    nextRooms[i] = *std::next(currentPosInPath);
+                } else {
+                    // Problem with path, stay in place
+                    nextRooms[i] = ant.currentRoom;
+                }
+            }
+        }
+        
+        // Phase 2: check capacities and resolve conflicts
+        bool movementMade = false;
+        
+        // Prioritize ants that can reach dormitory directly
+        for (size_t i = 0; i < ants.size(); i++) {
+            if (antReachedDormitory[i] || antMoved[i]) continue;
+            
+            Ant& ant = ants[i];
+            if (nextRooms[i] == "Sd") {
+                // Move directly to dormitory
+                ant.moveTo("Sd");
+                antReachedDormitory[i] = true;
+                antMoved[i] = true;
+                movementMade = true;
+                currentStepMoves.push_back({ant.id, "Sd"});
+            }
+        }
+        
+        // Then process other movements
+        for (size_t i = 0; i < ants.size(); i++) {
+            if (antReachedDormitory[i] || antMoved[i]) continue;
+            
+            Ant& ant = ants[i];
+            std::string targetRoom = nextRooms[i];
+            
+            if (targetRoom.empty() || targetRoom == ant.currentRoom) {
+                // Ant stays in place
+                continue;
+            }
+            
+            // Check if target room can accommodate one more ant
+            int currentOccupancy = roomOccupancy[targetRoom];
+            int capacity = rooms[targetRoom].capacity;
+            
+            if (targetRoom != "Sd" && targetRoom != "Sv" && currentOccupancy >= capacity) {
+                // Room is full, ant stays in place
+                continue;
+            }
+            
+            // Move the ant
+            ant.moveTo(targetRoom);
+            antMoved[i] = true;
+            movementMade = true;
+            roomOccupancy[targetRoom]++;
+            
+            // If ant reaches dormitory
+            if (targetRoom == "Sd") {
+                antReachedDormitory[i] = true;
+            }
+            
+            currentStepMoves.push_back({ant.id, targetRoom});
+        }
+        
+        // If no movement was made, it might be a blockage
+        if (!movementMade) {
+            // Could implement blockage resolution logic here
+            // For example, make some ants step back to let others pass
+            
+            // For now, consider it a problem if no ant could move
+            throw std::runtime_error("Blockage detected: no ant could move at step " + std::to_string(stepCount));
+        }
+        
+        // Check if all ants have reached the dormitory
+        allAntsInDormitory = true;
+        for (bool reached : antReachedDormitory) {
+            if (!reached) {
+                allAntsInDormitory = false;
+                break;
+            }
+        }
+        
+        // Record movements for this step
+        steps.push_back(currentStepMoves);
+    }
 }
 
 void AntColony::printSolution() const {
-    // Implementation would go here
-    // Print the solution in the required format
+    // Display ant movement steps
+    for (size_t i = 0; i < steps.size(); i++) {
+        std::cout << "+++ E" << (i + 1) << " +++" << std::endl;
+        
+        for (const auto& move : steps[i]) {
+            int antId = move.first;
+            std::string targetRoom = move.second;
+            
+            // Find previous room
+            std::string previousRoom;
+            if (i == 0 || targetRoom == "Sd") {
+                // First step or final destination
+                previousRoom = "Sv";
+            } else {
+                // Look in previous moves
+                for (const auto& prevMove : steps[i-1]) {
+                    if (prevMove.first == antId) {
+                        previousRoom = prevMove.second;
+                        break;
+                    }
+                }
+            }
+            
+            // Display movement
+            std::cout << "f" << antId << " - " << previousRoom << " - " << targetRoom << std::endl;
+        }
+    }
 }
 
 void AntColony::generateGraph() const {
-    // Implementation would go here
-    // Generate a graph representation of the ant colony
+    // Implementation of graph generation (visual or textual)
+    std::cout << "Ant colony graph:" << std::endl;
+    std::cout << "Number of ants: " << antCount << std::endl;
+    std::cout << "Rooms:" << std::endl;
+    
+    for (const auto& room : rooms) {
+        std::cout << "  " << room.first;
+        if (room.second.capacity > 1) {
+            std::cout << " {capacity: " << room.second.capacity << "}";
+        }
+        std::cout << std::endl;
+    }
+    
+    std::cout << "Tunnels:" << std::endl;
+    std::unordered_set<std::string> printedConnections;
+    
+    for (const auto& room : rooms) {
+        for (const std::string& connection : room.second.connections) {
+            // Avoid displaying the same connection twice
+            std::string connectionKey = room.first < connection ? 
+                                        room.first + "-" + connection : 
+                                        connection + "-" + room.first;
+            
+            if (printedConnections.find(connectionKey) == printedConnections.end()) {
+                std::cout << "  " << room.first << " - " << connection << std::endl;
+                printedConnections.insert(connectionKey);
+            }
+        }
+    }
 }
