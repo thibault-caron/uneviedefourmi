@@ -8,27 +8,24 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <deque>
 #include "Room.h"
-#include "Ant.h"
+
+
 
 class Anthill {
 public:
-    Anthill();
+    explicit Anthill(const std::string& filename);
     ~Anthill();
 
-    void buildAnthill();
-    void buildAntColony();
-
-
-
+    void loadRooms(const std::string& filename);
+    void loadConnections(const std::string& filename) const;
+    void displayAnthill() const;
+    Room* findRoomById(const std::string& id) const;
 
 private:
+    int room_count;
     int ant_count;
-    int const room_number;
     std::vector<Room*> rooms;
-    std::deque<Ant*> ants;
-
 };
 
 #endif //ANTHILL_H

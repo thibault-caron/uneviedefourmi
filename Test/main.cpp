@@ -1,71 +1,28 @@
 #include <iostream>
 #include <string>
-#include "Room.h"
-#include "Ant.h"
+#include <exception>
+#include "Anthill.h"
 
 int main() {
-    // Create rooms
-    Room* Sv = new Room("Sv", 2);
-    Room* S1 = new Room("S1", 1);
-    Room* S2 = new Room("S2", 1);
-    Room* Sd = new Room("Sd", 2);
+    try {
+        const std::string filename = "C:/Users/gravy/Desktop/PROJETS/FOURMIS/uneviedefourmi/Test/fourmilieres/fourmiliere_zero.txt";
 
-    // create anthill
-    Sv->addChildNode(S1);
-    Sv->addChildNode(S2);
-    S1->addChildNode(Sd);
-    S2->addChildNode(Sd);
+        // create an anthill
+        Anthill anthill0(filename);
 
-    // display anthill
-    std::cout << "Structure initiale :" << std::endl;
-    Sv->display();
+        // load other rooms
+        anthill0.loadRooms(filename);
 
-    // create ants in "Sv" room
-    Ant* f1 = new Ant("f1", Sv);
-    Ant* f2 = new Ant("f2", Sv);
+        // connect rooms with each other
+        anthill0.loadConnections(filename);
 
-    // add ants to Sv (start room)
-    Sv->addAnt(f1);
-    Sv->addAnt(f2);
-
-    // display anthill with ants
-    std::cout << "Structure initiale remplie:" << std::endl;
-    Sv->display();
-
-    // add one more ant in a room full
-    Ant* f3 = new Ant("f3", Sv);
-    Sv->addAnt(f3);
-
-    // f1 moves to room S1
-    if (S1->canAcceptAnt()) {
-        Sv->removeAnt();
-        S1->addAnt(f1);
-        f1->moves(S1);
+        // display the structure of the anthill
+        anthill0.displayAnthill();
     }
-
-    // f2 moves to room S2
-    if (S2->canAcceptAnt()) {
-        Sv->removeAnt();
-        S2->addAnt(f2);
-        f2->moves(S2);
+    catch (const std::exception& e) {
+        std::cerr << "Error : " << e.what() << std::endl;
+        return 1;
     }
-
-    // display anthill : step 1
-    std::cout << "Step 1 :" << std::endl;
-    Sv->display();
-
-    // display ants movements
-    f1->displayMovement();
-    f2->displayMovement();
-
-    // clean memory
-    delete f1;
-    delete f2;
-    delete f3;
-    delete Sv;
-    delete S1;
-    delete S2;
-    delete Sd;
 
     return 0;
 }

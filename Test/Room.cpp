@@ -4,13 +4,21 @@
 
 #include "Room.h"
 #include "Ant.h"
+#include "Anthill.h"
 
 
-Room::Room(std::string id, int size_max, int ants)
+Room::Room(const std::string& id, int size_max, int ants)
     : id_room(id), ANTS_MAX(size_max), ants_inside(ants) {}
 
 std::string Room::getId() const {
     return id_room;
+}
+
+Room::~Room() {
+    for (Ant* ant : ants) {
+        delete ant;
+    }
+    ants.clear();
 }
 
 void Room::addChildNode(Room *child) {
@@ -38,7 +46,10 @@ void Room::removeAnt() {
     }
 }
 
-void Room::display(int depth) const {
+void Room::display(int depth, std::set<const Room*>& visited) const {
+    if (visited.count(this)) return;
+    visited.insert(this);
+
     for (int i = 0; i<depth; i++) std::cout << " ";
 
     std::cout << "-Room \"" << id_room << "\""
@@ -55,9 +66,9 @@ void Room::display(int depth) const {
     std::cout << std::endl;
 
     for (auto child : children) {
-        child->display(depth + 1);
+        child->display(depth + 2, visited);
     }
 }
 
-Room::~Room() {}
+
 

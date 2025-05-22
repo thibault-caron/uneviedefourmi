@@ -5,7 +5,6 @@
 #ifndef ANT_H
 #define ANT_H
 
-#include <iostream>
 #include <string>
 #include "Room.h"
 

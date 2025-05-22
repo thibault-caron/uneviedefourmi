@@ -4,6 +4,7 @@
 
 #include "Ant.h"
 #include "Room.h"
+#include "Anthill.h"
 
 Ant::Ant(std::string id, Room* current, Room* previous)
     : id_ant(id), current_room(current), previous_room(previous) {}
