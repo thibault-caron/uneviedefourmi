@@ -305,6 +305,14 @@ void AntColony::simulateAntMovement() {
 }
 
 void AntColony::printSolution() const {
+    // Map to track each ant's current location
+    std::unordered_map<int, std::string> antLocations;
+    
+    // Initialize all ants to start in the vestibule
+    for (const auto& ant : ants) {
+        antLocations[ant.id] = "Sv";
+    }
+    
     // Display ant movement steps
     for (size_t i = 0; i < steps.size(); i++) {
         std::cout << "\n+++ E" << (i + 1) << " +++" << std::endl;
@@ -313,23 +321,14 @@ void AntColony::printSolution() const {
             int antId = move.first;
             std::string targetRoom = move.second;
             
-            // Find previous room
-            std::string previousRoom;
-            if (i == 0) {
-                // First step
-                previousRoom = "Sv";
-            } else {
-                // Look in previous moves
-                for (const auto& prevMove : steps[i-1]) {
-                    if (prevMove.first == antId) {
-                        previousRoom = prevMove.second;
-                        break;
-                    }
-                }
-            }
+            // Get previous room from our tracking map
+            std::string previousRoom = antLocations[antId];
             
             // Display movement
-            std::cout << "f" << antId << " - " << previousRoom << " --> " << targetRoom << std::endl;
+            std::cout << "f" << antId << ": " << previousRoom << " --> " << targetRoom << std::endl;
+            
+            // Update the ant's location for the next step
+            antLocations[antId] = targetRoom;
         }
     }
 }
