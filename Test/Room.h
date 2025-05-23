@@ -20,7 +20,9 @@ public:
     ~Room();
 
     std::string getId() const;
+    Ant* getFirstAnt() const;
     void addChildNode(Room* child);
+    bool hasAnts() const;
     bool canAcceptAnt() const;
     void display(int depth, std::set<const Room*>& visited) const;
     void addAnt(Ant* ant);

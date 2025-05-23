@@ -5,7 +5,7 @@
 
 int main() {
     try {
-        const std::string filename = "C:/Users/gravy/Desktop/PROJETS/FOURMIS/uneviedefourmi/Test/fourmilieres/fourmiliere_zero.txt";
+        const std::string filename = "C:/Users/gravy/Desktop/PROJETS/FOURMIS/uneviedefourmi/Test/fourmilieres/fourmiliere_cinq.txt";
 
         // create an anthill
         Anthill anthill0(filename);
@@ -18,6 +18,9 @@ int main() {
 
         // display the structure of the anthill
         anthill0.displayAnthill();
+        anthill0.movesAnt(anthill0.findRoomById("Sv"), anthill0.findRoomById("S1"));
+        anthill0.displayAnthill();
+
     }
     catch (const std::exception& e) {
         std::cerr << "Error : " << e.what() << std::endl;

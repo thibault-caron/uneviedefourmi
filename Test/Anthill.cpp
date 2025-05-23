@@ -142,5 +142,21 @@ void Anthill::displayAnthill() const {
     rooms[0]->display(0, visited);
 }
 
+void Anthill::movesAnt(Room* origin_room, Room* direction_room) {
+    if (origin_room->hasAnts()) {
+        if (direction_room->canAcceptAnt()) {
+            Ant* ant = origin_room->getFirstAnt();
+            direction_room->addAnt(ant);
+            ant->moves(direction_room);
+            ant->displayMovement();
+            origin_room->removeAnt();
+        } else {
+            std::cout << "Room " << direction_room->getId() << " is full!" << std::endl;
+        }
+    } else {
+        std::cout << "No ants in room " << origin_room->getId() << std::endl;
+    }
+}
+
 
 

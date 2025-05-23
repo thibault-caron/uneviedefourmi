@@ -8,10 +8,20 @@
 
 
 Room::Room(const std::string& id, int size_max, int ants)
-    : id_room(id), ANTS_MAX(size_max), ants_inside(ants) {}
+    : id_room(id), ANTS_MAX(size_max), ants_inside(ants) {
+
+}
 
 std::string Room::getId() const {
     return id_room;
+}
+
+Ant* Room::getFirstAnt() const {
+    if (!ants.empty()) {
+        return ants.front();
+    } else {
+        return nullptr;
+    }
 }
 
 Room::~Room() {
@@ -23,6 +33,10 @@ Room::~Room() {
 
 void Room::addChildNode(Room *child) {
     children.push_back(child);
+}
+
+bool Room::hasAnts() const {
+    return !ants.empty();
 }
 
 bool Room::canAcceptAnt() const {

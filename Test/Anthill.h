@@ -21,6 +21,7 @@ public:
     void loadConnections(const std::string& filename) const;
     void displayAnthill() const;
     Room* findRoomById(const std::string& id) const;
+    void movesAnt(Room* origin_room, Room* direction_room);
 
 private:
     int room_count;
