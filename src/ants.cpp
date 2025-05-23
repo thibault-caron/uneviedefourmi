@@ -307,7 +307,7 @@ void AntColony::simulateAntMovement() {
 void AntColony::printSolution() const {
     // Display ant movement steps
     for (size_t i = 0; i < steps.size(); i++) {
-        std::cout << "+++ E" << (i + 1) << " +++" << std::endl;
+        std::cout << "\n+++ E" << (i + 1) << " +++" << std::endl;
         
         for (const auto& move : steps[i]) {
             int antId = move.first;
@@ -315,8 +315,8 @@ void AntColony::printSolution() const {
             
             // Find previous room
             std::string previousRoom;
-            if (i == 0 || targetRoom == "Sd") {
-                // First step or final destination
+            if (i == 0) {
+                // First step
                 previousRoom = "Sv";
             } else {
                 // Look in previous moves
@@ -329,16 +329,16 @@ void AntColony::printSolution() const {
             }
             
             // Display movement
-            std::cout << "f" << antId << " - " << previousRoom << " - " << targetRoom << std::endl;
+            std::cout << "f" << antId << " - " << previousRoom << " --> " << targetRoom << std::endl;
         }
     }
 }
 
 void AntColony::generateGraph() const {
     // Implementation of graph generation (visual or textual)
-    std::cout << "Ant colony graph:" << std::endl;
-    std::cout << "Number of ants: " << antCount << std::endl;
-    std::cout << "Rooms:" << std::endl;
+    std::cout << "\nAnt colony graph:" << std::endl;
+    std::cout << "\nNumber of ants: " << antCount << std::endl;
+    std::cout << "\nRooms:" << std::endl;
     
     for (const auto& room : rooms) {
         std::cout << "  " << room.first;
@@ -348,7 +348,7 @@ void AntColony::generateGraph() const {
         std::cout << std::endl;
     }
     
-    std::cout << "Tunnels:" << std::endl;
+    std::cout << "\nTunnels:" << std::endl;
     std::unordered_set<std::string> printedConnections;
     
     for (const auto& room : rooms) {
