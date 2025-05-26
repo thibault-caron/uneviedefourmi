@@ -6,18 +6,30 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <deque>
 #include "Room.h"
 #include "Ant.h"
 #include "Anthill.h"
 
+/**
+ * @brief Constructs an Anthill by reading initial room and ant counts from a file.
+ *
+ * The file format requires:
+ * - First line: "r=<number_of_rooms>"
+ * - Second line: "f=<number_of_ants>"
+ *
+ * Initializes the start room "Sv" and populates it with all ants.
+ *
+ * @param filename The file path to read initial data from.
+ * @throws std::runtime_error If a file cannot be opened or the format is invalid.
+ */
 Anthill::Anthill(const std::string& filename) : room_count(0), ant_count(0) {
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file " + filename);
     }
     std::string line;
-    // initialize room_count
+
+    // Read and parse the number of rooms
     if (std::getline(file, line)) {
         if (line.substr(0, 2) == "r=") {
             room_count = std::stoi(line.substr(2));
@@ -25,7 +37,8 @@ Anthill::Anthill(const std::string& filename) : room_count(0), ant_count(0) {
             throw std::runtime_error("Invalid file format : missing room count");
         }
     }
-    // initialize ant_count
+
+    // Read and parse the number of ants
     if (std::getline(file, line)) {
         if (line.substr(0, 2) == "f=") {
             ant_count = std::stoi(line.substr(2));
@@ -34,10 +47,10 @@ Anthill::Anthill(const std::string& filename) : room_count(0), ant_count(0) {
         }
     }
 
-    // create first room "Sv"
+    // Create the start room "Sv" with capacity equal to the number of ants
     rooms.push_back(new Room("Sv", ant_count));
 
-    // create alls ants and add in the first room
+    // Create ants and add them to the start room
     for (int i = 1; i <= ant_count; i++) {
         rooms[0]->addAnt(new Ant("f" + std::to_string(i),rooms[0]));
     }
@@ -45,6 +58,9 @@ Anthill::Anthill(const std::string& filename) : room_count(0), ant_count(0) {
     file.close();
 }
 
+/**
+ * @brief Destructor that deallocates all dynamically allocated rooms.
+ */
 Anthill::~Anthill() {
     for (Room* room : rooms) {
         delete room;
@@ -52,7 +68,18 @@ Anthill::~Anthill() {
     rooms.clear();
 }
 
-
+/**
+ * @brief Loads additional rooms from a specified file.
+ *
+ * The file format expects each line to define a room by its identifier,
+ * optionally followed by a capacity in braces, e.g.:
+ *   RoomID {capacity}
+ * If no capacity is specified, defaults to 1.
+ * Adds a destination room "Sd" with capacity equal to the number of ants.
+ *
+ * @param filename The path to the file containing room definitions.
+ * @throws std::runtime_error If the file cannot be opened.
+ */
 void Anthill::loadRooms(const std::string &filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -66,30 +93,47 @@ void Anthill::loadRooms(const std::string &filename) {
         if (line.empty()) {
             continue;
         }
+
+        // Ignore lines with '-' or '=' which are connection lines or metadata
         if (line.find("-") == std::string::npos && line.find("=") == std::string::npos) {
-            // find the id_room
             std::string identifier;
             int capacity;
+
             std::istringstream linestream(line);
             linestream >> identifier;
-            // find the capacity of the room
+
+            // Parse capacity if present between { }
             size_t open = line.find('{');
             size_t close = line.find('}');
             if (open != std::string::npos && close != std::string::npos && close > open) {
                 std::string value = line.substr(open + 1, close - open - 1);
                 capacity = std::stoi(value);
             } else {
-                capacity = 1;
+                capacity = 1; // default capacity
             }
+
             if (!identifier.empty()) {
                 rooms.push_back(new Room(identifier, capacity));
             }
         }
     }
     file.close();
+
+    // Add the destination room "Sd" with capacity equal to ant_count
     rooms.push_back(new Room("Sd", ant_count));
 }
 
+/**
+ * @brief Loads bidirectional connections between rooms from a file.
+ *
+ * The file format expects lines in the form:
+ *   RoomID1 - RoomID2
+ *
+ * Adds connections between the two rooms both ways.
+ *
+ * @param filename The path to the file containing connection definitions.
+ * @throws std::runtime_error If the file cannot be opened.
+ */
 void Anthill::loadConnections(const std::string &filename) const {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -122,6 +166,12 @@ void Anthill::loadConnections(const std::string &filename) const {
     file.close();
 }
 
+/**
+ * @brief Finds a room by its identifier.
+ *
+ * @param id The identifier string of the room to find.
+ * @return Pointer to the Room if found, nullptr otherwise.
+ */
 Room* Anthill::findRoomById(const std::string& id) const {
     for (Room* room : rooms) {
         if (room->getId() == id) {
@@ -131,6 +181,11 @@ Room* Anthill::findRoomById(const std::string& id) const {
     return nullptr;
 }
 
+/**
+ * @brief Displays the anthill starting from the first room.
+ *
+ * Performs a depth-first traversal to show all connected rooms.
+ */
 void Anthill::displayAnthill() const {
     if (rooms.empty()) {
         std::cout << "No rooms found" << std::endl;
@@ -142,6 +197,17 @@ void Anthill::displayAnthill() const {
     rooms[0]->display(0, visited);
 }
 
+
+/**
+ * @brief Moves an ant from the origin room to the direction room.
+ *
+ * Checks if the origin room contains ants and if the destination room can accept more ants.
+ * If successful, moves the first ant, updates its location, and displays the movement.
+ * Otherwise, prints appropriate error messages.
+ *
+ * @param origin_room Pointer to the room where the ant currently is.
+ * @param direction_room Pointer to the room where the ant should move.
+ */
 void Anthill::movesAnt(Room* origin_room, Room* direction_room) {
     if (origin_room->hasAnts()) {
         if (direction_room->canAcceptAnt()) {
