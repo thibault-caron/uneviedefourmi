@@ -90,6 +90,12 @@ public:
      */
     void movesAnt(Room* origin_room, Room* direction_room);
 
+    bool haveCommonRooms(const Path& path1, const Path& path2);
+
+    std::vector<Path> analyzePaths(const std::vector<Path>& allPaths);
+
+
+
 private:
     int room_count;                ///< Number of rooms in the anthill
     int ant_count;                 ///< Number of ants in the anthill

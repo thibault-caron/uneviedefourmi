@@ -10,6 +10,7 @@
 #include <vector>
 #include <set>
 #include "Ant.h"
+#include "Path.h"
 
 
 class Ant;
@@ -83,6 +84,13 @@ public:
      * @brief Removes the first ant from the room.
      */
     void removeAnt();
+
+    std::vector<Path> findAllPaths(Room* targetRoom, std::set<const Room*>& visited, Path path);
+
+    std::vector<Path> findAllPaths(Room* targetRoom, std::set<const Room*>& visited) {
+        return findAllPaths(targetRoom, visited, Path(ANTS_MAX));
+    };
+
 
 
 private:

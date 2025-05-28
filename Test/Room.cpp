@@ -134,5 +134,29 @@ void Room::display(int depth, std::set<const Room*>& visited) const {
     }
 }
 
+std::vector<Path> Room::findAllPaths(Room* targetRoom, std::set<const Room*>& visited, Path path) {
+
+    std::vector<Path> allPaths;
+
+    if (visited.count(this)) return allPaths;
+
+    path.capacityMinimum = std::min(path.capacityMinimum, ANTS_MAX);
+    path.path.push_back(this);
+
+    visited.insert(this);
+
+    if (this == targetRoom) {
+        allPaths.push_back(path);
+    } else {
+        for (auto child : children) {
+            std::set<const Room*> newVisited = visited;
+            auto childPaths = child->findAllPaths(targetRoom, newVisited, path);
+            allPaths.insert(allPaths.end(), childPaths.begin(), childPaths.end());
+        }
+    }
+
+    return allPaths;
+}
+
 
 

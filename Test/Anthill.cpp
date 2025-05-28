@@ -10,6 +10,9 @@
 #include "Ant.h"
 #include "Anthill.h"
 
+#include <algorithm>
+#include <thread>
+
 /**
  * @brief Constructs an Anthill by reading initial room and ant counts from a file.
  *
@@ -157,7 +160,7 @@ void Anthill::loadConnections(const std::string &filename) const {
 
                 if (parent && child) {
                     parent->addChildNode(child);
-                    child->addChildNode(parent);
+                    // child->addChildNode(parent);
                 }
             }
         }
@@ -221,6 +224,78 @@ void Anthill::movesAnt(Room* origin_room, Room* direction_room) {
         }
     } else {
         std::cout << "No ants in room " << origin_room->getId() << std::endl;
+    }
+}
+
+bool Anthill::haveCommonRooms(const Path& path1, const Path& path2) {
+    for (const auto* room1 : path1.path) {
+        for (const auto* room2 : path2.path) {
+            if (room1 == room2 &&
+                room1->getId() != "Sv" &&
+                    room1->getId() != "Sd") {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+std::vector<Path> Anthill::analyzePaths(const std::vector<Path>& allPaths) {
+    if (allPaths.empty()) {
+        return {};
+    }
+
+    int maxCapacity = 0;
+    for (const auto& path : allPaths) {
+        maxCapacity = std::max(maxCapacity, path.capacityMinimum);
+    }
+
+    std::vector<Path> bestPaths;
+    for (const auto& path : allPaths) {
+        if (path.capacityMinimum == maxCapacity) {
+            bestPaths.push_back(path);
+        }
+    }
+
+    if (bestPaths.size() == 1) {
+        return bestPaths;
+    }
+
+    std::vector<Path> disjointPaths;
+    for (const auto& path : bestPaths) {
+        bool isDisjoint = true;
+        for (const auto& existingPath : disjointPaths) {
+            if (haveCommonRooms(path, existingPath)) {
+                isDisjoint = false;
+                break;
+            }
+        }
+        if (isDisjoint) {
+            disjointPaths.push_back(path);
+        }
+    }
+
+    if (disjointPaths.empty()) {
+        auto shortestPath = std::min_element(bestPaths.begin(), bestPaths.end(), [](const Path& p1, const Path& p2) {
+            return p1.path.size() < p2.path.size();
+        });
+        return {*shortestPath};
+    }
+
+    size_t firstLength = disjointPaths[0].path.size();
+    bool sameLengths = std::all_of(disjointPaths.begin(), disjointPaths.end(),
+        [firstLength](const Path& p) {
+            return p.path.size() == firstLength;
+        });
+
+    if (sameLengths) {
+        return disjointPaths;
+    } else {
+        auto shortestPath = std::min_element(disjointPaths.begin(), disjointPaths.end(),
+            [](const Path& a, const Path& b) {
+                return a.path.size() < b.path.size();
+            });
+        return {*shortestPath};
     }
 }
 

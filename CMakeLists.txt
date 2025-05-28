@@ -19,4 +19,5 @@ add_executable(uneviedefourmi
         Test/Anthill.h
         Test/main.cpp
         Test/Room.cpp
-        Test/Room.h)
+        Test/Room.h
+        Test/Path.h)
