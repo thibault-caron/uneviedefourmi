@@ -66,6 +66,14 @@ bool Room::hasAnts() const {
     return !ants.empty();
 }
 
+int Room::getAntsInside() const {
+    return ants_inside;
+}
+
+int Room::getCapacity() {
+    return ANTS_MAX;
+}
+
 /**
  * @brief Determines if the room has capacity to accept another ant.
  *

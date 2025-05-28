@@ -19,19 +19,18 @@ int main() {
         // display the structure of the anthill
         anthill0.displayAnthill();
 
-        // Obtenir la Room de départ et d'arrivée
+        // Get start and end rooms
         Room* start = anthill0.findRoomById("Sv");
         Room* end = anthill0.findRoomById("Sd");
         if (!start || !end) {
-            std::cout << "Erreur: Impossible de trouver les salles de début ou de fin" << std::endl;
+            std::cout << "Error: Unable to find start or end rooms" << std::endl;
             return 1;
         }
 
-
-        // Créer le set pour les salles visitées
+        // Create set for visited rooms
         std::set<const Room*> visited;
 
-        // Obtenir tous les chemins possibles à partir de la première salle
+        // Get all possible paths from start to end
         auto allPaths = start->findAllPaths(end, visited);
 
         if (allPaths.empty()) {
@@ -40,18 +39,63 @@ int main() {
         }
 
 
-        // Analyser les chemins pour trouver les meilleurs
+        // Analyze paths to find the best ones
         auto bestPaths = anthill0.analyzePaths(allPaths);
 
-        // Afficher les résultats
-        std::cout << "Chemins optimaux trouvés : " << bestPaths.size() << std::endl;
+        // Display results
+        std::cout << "Optimal paths found : " << bestPaths.size() << std::endl;
         for (const auto& path : bestPaths) {
-            std::cout << "Chemin (capacité " << path.capacityMinimum << ") : ";
+            std::cout << "Path (capacity " << path.capacityMinimum << ") : ";
+            bool first = true;
             for (const auto* room : path.path) {
-                std::cout << room->getId() << " -> ";
+                if (!first) std::cout << " -> ";
+                std::cout << room->getId();
+                first = false;
             }
             std::cout << std::endl;
         }
+
+        // If no valid paths found, exit
+        if (bestPaths.empty()) {
+            std::cout << "No valid paths found for ant movement" << std::endl;
+            return 1;
+        }
+
+        int step = 1;
+        bool someAntMoved;
+
+        do {
+            someAntMoved = false;
+            std::cout << "\n+++ E" << step << " +++" << std::endl;
+
+            // Pour chaque chemin optimal
+            for (const auto& path : bestPaths) {
+                // On parcourt toutes les salles du chemin de l'avant-dernière à la première
+                for (int i = path.path.size() - 2; i >= 0; i--) {
+                    Room* previousRoom = const_cast<Room*>(path.path[i]);
+                    Room* currentRoom = const_cast<Room*>(path.path[i + 1]);
+
+                    // On vérifie combien de fourmis peuvent passer
+                    int antsInPrevious = previousRoom->getAntsInside();
+                    int spaceInCurrent = currentRoom->getCapacity() - currentRoom->getAntsInside();
+
+                    // On déplace le maximum possible de fourmis
+                    int antsToMove = std::min(antsInPrevious, spaceInCurrent);
+
+                    // S'il y a des fourmis à déplacer
+                    if (antsToMove > 0) {
+                        for (int j = 0; j < antsToMove; j++) {
+                            anthill0.movesAnt(previousRoom, currentRoom);
+                        }
+                        someAntMoved = true;
+                    }
+                }
+            }
+            step++;
+        } while (someAntMoved);
+
+
+        std::cout << "\nToutes les fourmis ont atteint leur destination !" << std::endl;
     }
     catch (const std::exception& e) {
         std::cerr << "Error : " << e.what() << std::endl;

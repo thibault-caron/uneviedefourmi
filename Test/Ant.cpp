@@ -17,6 +17,10 @@ Ant::Ant(std::string id, Room* current, Room* previous)
  */
 Ant::~Ant() {}
 
+std::string Ant::getId() const {
+    return id_ant;
+}
+
 /**
  * @brief Moves the ant to a new room.
  *

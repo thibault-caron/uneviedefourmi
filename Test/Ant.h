@@ -32,6 +32,8 @@ public:
      */
     ~Ant();
 
+    std::string getId() const;
+
     /**
      * @brief Moves the ant to a new room.
      * Updates the current and previous room pointers.

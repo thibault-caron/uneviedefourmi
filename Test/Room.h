@@ -61,6 +61,10 @@ public:
      */
     bool hasAnts() const;
 
+    int getAntsInside() const;
+
+    int getCapacity();
+
     /**
      * @brief Checks if the room can accept a new ant.
      * @return True if the number of ants is lower than the maximum capacity.
@@ -89,7 +93,7 @@ public:
 
     std::vector<Path> findAllPaths(Room* targetRoom, std::set<const Room*>& visited) {
         return findAllPaths(targetRoom, visited, Path(ANTS_MAX));
-    };
+    }
 
 
 
