@@ -1,11 +1,12 @@
 #include <iostream>
 #include <string>
 #include <exception>
+#include <algorithm>
 #include "Anthill.h"
 
 int main() {
     try {
-        const std::string filename = "C:/Users/gravy/Desktop/PROJETS/FOURMIS/uneviedefourmi/Test/fourmilieres/fourmiliere_cinq.txt";
+        const std::string filename = "C:/Users/gravy/Desktop/PROJETS/FOURMIS/uneviedefourmi/Test/fourmilieres/salle_d_at_ant.txt";
 
         // create an anthill
         Anthill anthill0(filename);
@@ -33,14 +34,47 @@ int main() {
         // Get all possible paths from start to end
         auto allPaths = start->findAllPaths(end, visited);
 
+        // trier allPaths pour mettre le bestPaths tout en haut
+
         if (allPaths.empty()) {
             std::cout << "Aucun chemin trouvé" << std::endl;
             return 1;
         }
 
 
+        // tri allPaths
+        std::sort(allPaths.begin(), allPaths.end(), [](const Path& a, const Path& b) {
+            if (a.capacityMinimum != b.capacityMinimum) {
+                return a.capacityMinimum > b.capacityMinimum; // ordre décroissant
+            }
+            return a.path.size() < b.path.size(); // ordre croissant
+        });
+
+
+
         // Analyze paths to find the best ones
-        auto bestPaths = anthill0.analyzePaths(allPaths);
+        // auto bestPaths = anthill0.analyzePaths(allPaths);
+        std::vector<Path> bestPaths;
+        int n = std::min(3, static_cast<int>(allPaths.size()));
+
+        // peut etre faire des essais à chaque ajout de path pour voir si ca fait augamnté le nombre d'étape pour diminuer...
+
+        for (int i = 0; i < 3; i++) {
+            bestPaths.push_back(allPaths[i]);
+        }
+
+        std::cout << "All paths : " << allPaths.size() << std::endl;
+        for (const auto& path : allPaths) {
+            std::cout << "Path (capacity " << path.capacityMinimum << ") : ";
+            bool first = true;
+            for (const auto& room : path.path) {
+                if (!first) std::cout << " -> ";
+                std::cout << room->getId();
+                first = false;
+            }
+            std::cout << std::endl;
+        }
+
 
         // Display results
         std::cout << "Optimal paths found : " << bestPaths.size() << std::endl;
