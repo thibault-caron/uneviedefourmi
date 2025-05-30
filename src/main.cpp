@@ -22,7 +22,6 @@ int main(int argc, char* argv[]) {
         "../fourmilieres/" + inputPath,     // Up one level then fourmilieres
         "../../fourmilieres/" + inputPath,  // Up two levels then fourmilieres
         "../" + inputPath,                  // Just up one level
-        "fourmiliere_" + inputPath          // Try with prefix
     };
 
     for (const auto& path : possiblePaths) {
