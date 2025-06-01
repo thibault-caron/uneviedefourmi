@@ -170,7 +170,6 @@ public:
      */
     void displayPaths(const std::vector<Path>& paths, const std::string& namePaths) const;
 
-
 private:
     int room_count;                  ///< Number of rooms in the anthill
     int ant_count;                   ///< Number of ants in the anthill

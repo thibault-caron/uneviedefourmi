@@ -43,6 +43,11 @@ public:
      */
     std::string getId() const;
 
+    /**
+     * @brief Gets the collection of ants currently in the room.
+     * @return A double-ended queue containing pointers to all ants in the room.
+     *         The queue maintains the order in which ants entered the room (FIFO).
+     */
     std::deque<Ant*> getAnts() const;
 
     /**
@@ -63,8 +68,16 @@ public:
      */
     bool hasAnts() const;
 
+    /**
+     * @brief Gets the current number of ants present in the room.
+     * @return An integer representing the count of ants currently in the room.
+     */
     int getAntsInside() const;
 
+    /**
+     * @brief Gets the maximum capacity of ants that can be present in the room simultaneously.
+     * @return An integer representing the maximum number of ants the room can hold.
+     */
     int getCapacity();
 
     /**
@@ -91,13 +104,35 @@ public:
      */
     void removeAnt();
 
+    /**
+     * @brief Recursively finds all possible paths from this room to a target room.
+     *
+     * @param targetRoom Pointer to the destination room
+     * @param visited Set of already visited rooms to avoid cycles
+     * @param path Path object containing the current path being built and its minimum capacity
+     *
+     * @return A vector containing all valid paths found to the target room
+     *
+     * @details This method uses a Depth-First Search (DFS) algorithm to:
+     *          - Explore all possible paths to the target room
+     *          - Update the minimum capacity of each path
+     *          - Avoid cycles by keeping track of visited rooms
+     */
     std::vector<Path> findAllPaths(Room* targetRoom, std::set<const Room*>& visited, Path path);
 
+    /**
+     * @brief Convenience overload to find all possible paths to a target room.
+     *
+     * @param targetRoom Pointer to the destination room
+     * @param visited Set of already visited rooms to avoid cycles
+     *
+     * @return A vector containing all valid paths found to the target room
+     *
+     * @details This is a wrapper method that initializes a new Path with the room's maximum capacity (ANTS_MAX) and delegates to the main findAllPaths implementation.
+     */
     std::vector<Path> findAllPaths(Room* targetRoom, std::set<const Room*>& visited) {
         return findAllPaths(targetRoom, visited, Path(ANTS_MAX));
     }
-
-
 
 private:
     std::string const id_room;         ///< Unique identifier for the room.

@@ -15,14 +15,14 @@
 
 
 Anthill::Anthill(const std::string& filename) : room_count(0), ant_count(0) {
-    // Open configuration file
+    // Open the configuration file
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file " + filename);
     }
     std::string line;
 
-    // Read and parse the number of rooms (expected format : "r=X")
+    // Read and parse the number of rooms (expected format: "r=X")
     if (std::getline(file, line)) {
         if (line.substr(0, 2) == "r=") {
             room_count = std::stoi(line.substr(2));
@@ -31,7 +31,7 @@ Anthill::Anthill(const std::string& filename) : room_count(0), ant_count(0) {
         }
     }
 
-    // Read and parse the number of ants (expected format : "f=X")
+    // Read and parse the number of ants (expected format: "f=X")
     if (std::getline(file, line)) {
         if (line.substr(0, 2) == "f=") {
             ant_count = std::stoi(line.substr(2));
@@ -65,7 +65,7 @@ Anthill::~Anthill() {
 
 
 void Anthill::loadRooms(const std::string &filename) {
-    // Open configuration  file
+    // Open the configuration file
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file" + filename);
@@ -73,7 +73,7 @@ void Anthill::loadRooms(const std::string &filename) {
 
     std::string line;
 
-    // Process each line of file
+    // Process each line of the file
     while (std::getline(file, line)) {
         if (line.empty()) {
             continue;
@@ -84,7 +84,7 @@ void Anthill::loadRooms(const std::string &filename) {
             std::string identifier;
             int capacity;
 
-            // Extract room identifier from line
+            // Extract room identifier from a line
             std::istringstream linestream(line);
             linestream >> identifier;
 
@@ -99,7 +99,7 @@ void Anthill::loadRooms(const std::string &filename) {
                 capacity = 1; // default capacity
             }
 
-            // Create a new room if identifier is valid
+            // Create a new room if the identifier is valid
             if (!identifier.empty()) {
                 rooms.push_back(new Room(identifier, capacity));
             }
@@ -114,7 +114,7 @@ void Anthill::loadRooms(const std::string &filename) {
 
 
 void Anthill::loadConnections(const std::string &filename) const {
-    // Open configuration file
+    // Open the configuration file
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Could not open file" + filename);
@@ -127,7 +127,7 @@ void Anthill::loadConnections(const std::string &filename) const {
         if (line.empty()) {
             continue;
         }
-        // Look for lines containing connection symbol '-'
+        // Look for lines containing the connection symbol '-'
         if (line.find("-") != std::string::npos) {
             std::istringstream linestream(line);
             std::string from, dash, to;
@@ -139,7 +139,7 @@ void Anthill::loadConnections(const std::string &filename) const {
                 Room* parent = findRoomById(from);
                 Room* child = findRoomById(to);
 
-                // Create bidirectional connection between rooms
+                // Create a bidirectional connection between rooms
                 if (parent && child) {
                     parent->addChildNode(child);
                     child->addChildNode(parent); // Make connection bidirectional
@@ -176,7 +176,7 @@ void Anthill::displayAnthill() const {
     // Create a set to track visited rooms during traversal and avoid infinite loops
     std::set<const Room*> visited;
     std::cout << "=== Map of the anthill ===" << std::endl;
-    // Start recursive display from the first room (index 0)
+    // Start a recursive display from the first room (index 0)
     rooms[0]->display(0, visited);
 }
 
@@ -186,7 +186,7 @@ void Anthill::antMovementDisplay(Room* origin_room, Room* direction_room) {
     if (!origin_room || !direction_room) return;
 
     Ant* ant = origin_room->getFirstAnt();
-    if (ant && ant->getcanMove() == true) {
+    if (ant && ant->getCanMove() == true) {
         direction_room->addAnt(ant);
         ant->moves(direction_room);
         ant->displayMovement();
@@ -214,16 +214,16 @@ void Anthill::displayBestSolution() {
     int step = 1;
     bool someAntMoved;
 
-    // Reset simulation by moving all ants back to start room
+    // Reset simulation by moving all ants back to the start room
     while (end->getAntsInside() > 0) {
         movesAnt(end, start);
     }
 
     do {
-        // Display current step number
+        // Display the current step number
         std::cout << "\n+++ E" << step << " +++" << std::endl;
 
-        // Prepare for new movement phase
+        // Prepare for a new movement phase
         resetAllAntsCanMove();
         someAntMoved = false;
 
@@ -264,7 +264,7 @@ void Anthill::movesAnt(Room* origin_room, Room* direction_room) {
     Ant* ant = origin_room->getFirstAnt();
 
     // Check if there is an ant and if it's allowed to move
-    if (ant && ant->getcanMove() == true) {
+    if (ant && ant->getCanMove() == true) {
         // Perform the actual movement
         direction_room->addAnt(ant);   // Add ant to the new room
         origin_room->removeAnt();      // Remove ant from the old room
@@ -275,11 +275,11 @@ void Anthill::movesAnt(Room* origin_room, Room* direction_room) {
 
 
 void Anthill::resetAllAntsCanMove () {
-    // Iterate through all rooms ine the anthill
+    // Iterate through all rooms in the anthill
     for (Room* room : rooms) {
         // For each ant in the current room
         for (Ant* ant : room->getAnts()) {
-            if (ant->getcanMove() == false) {
+            if (ant->getCanMove() == false) {
                 ant->toggleCanMove(); // Set canMove to true
             }
         }
@@ -292,7 +292,7 @@ int Anthill::simulateAntsMovement(Room* start, Room* end) {
     int steps = 0;
     bool someAntMoved;
 
-    // Reset simulation by moving all ants back to start room
+    // Reset simulation by moving all ants back to the start room
     while (end->getAntsInside() > 0) {
         this->movesAnt(end, start);
     }
@@ -351,7 +351,7 @@ void Anthill::searchAllPaths() {
         throw std::runtime_error("Error: Unable to find start or end rooms");
     }
 
-    // Create set to track visited rooms during traversal and avoid infinite loops
+    // Create a set to track visited rooms during traversal and avoid infinite loops
     std::set<const Room*> visited;
     // Find and store all possible paths from start to end
     allPaths = start->findAllPaths(end, visited);
@@ -389,7 +389,7 @@ void Anthill::findOptimalPaths() {
         throw std::runtime_error("Error: Unable to find start or end rooms");
     }
 
-    // Reset simulation by moving all ants back to start room
+    // Reset simulation by moving all ants back to the start room
     while (end->getAntsInside() > 0) {
         movesAnt(end, start);
     }
@@ -410,7 +410,7 @@ void Anthill::findOptimalPaths() {
         // Simulate movement with the current path combination
         int currentSteps = simulateAntsMovement(start, end);
 
-        // Update best solution if current is better
+        // Update the best solution if the current is better
         if (firstTry || currentSteps <= minimumSteps) {
             minimumSteps = currentSteps;
             bestPathCount = n_paths;
@@ -437,7 +437,7 @@ void Anthill::sortAllPaths() {
         return;
     }
 
-    // Sort paths using custom comparison lambda function
+    // Sort paths using a custom comparison lambda function
     std::sort(allPaths.begin(), allPaths.end(),
         [](const Path& a, const Path& b) {
             // Primary sort by minimum capacity (descending order)
@@ -459,7 +459,7 @@ void Anthill::displayPaths(const std::vector<Path>& paths, const std::string& na
 
     // Iterate through each path in the collection
     for (const auto& path : paths) {
-        // Display path header with its minimum capacity
+        // Display the path header with its minimum capacity
         std::cout << "Path (capacity " << path.capacityMinimum << ") : ";
 
         // Flag to handle arrow separator formatting
