@@ -23,6 +23,10 @@ std::string Room::getId() const {
     return id_room;
 }
 
+std::deque<Ant*> Room::getAnts() const {
+    return ants;
+}
+
 /**
  * @brief Retrieves the first ant in the room's deque.
  *

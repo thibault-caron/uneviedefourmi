@@ -10,7 +10,7 @@
  *@brief Ant constructor.
  */
 Ant::Ant(std::string id, Room* current, Room* previous)
-    : id_ant(id), current_room(current), previous_room(previous) {}
+    : id_ant(id), current_room(current), previous_room(previous), canMove(true) {}
 
 /**
  *@brief Ant destructor.
@@ -29,6 +29,15 @@ std::string Ant::getId() const {
 void Ant::moves(Room* new_room) {
     previous_room = current_room;
     current_room = new_room;
+    canMove = false;
+}
+
+bool Ant::getcanMove() const {
+    return canMove;
+}
+
+void Ant::toggleCanMove() {
+    canMove = !canMove;
 }
 
 /**

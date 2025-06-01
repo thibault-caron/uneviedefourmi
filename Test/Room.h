@@ -43,6 +43,8 @@ public:
      */
     std::string getId() const;
 
+    std::deque<Ant*> getAnts() const;
+
     /**
      * @brief Gets the first ant in the room.
      * @return Pointer to the first ant, or nullptr if the room is empty.

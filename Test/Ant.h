@@ -41,6 +41,10 @@ public:
      */
     void moves(Room* new_room);
 
+    bool getcanMove() const;
+
+    void toggleCanMove();
+
     /**
      * @brief Displays the ant's movement.
      * Shows: id - previous room - current room.
@@ -51,6 +55,7 @@ private:
     std::string const id_ant;   ///< Unique identifier for the ant.
     Room* current_room;         ///< Pointer to the current room.
     Room* previous_room;        ///< Pointer to the previous room (optional).
+    bool canMove;
 
 };
 
