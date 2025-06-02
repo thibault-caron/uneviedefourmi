@@ -1,6 +1,3 @@
-//
-// Created by gravy on 20/05/2025.
-//
 
 #ifndef ROOM_H
 #define ROOM_H
