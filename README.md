@@ -1,26 +1,26 @@
-# uneviedefourmi
-exploration des structures nodales (pathing?) via un exemple de fourmilière.
+# uneviedefourmi (an ant's life)
+Exploration of nodal structures (pathing?) through an anthill example.
 
-## analyse:
+## Analysis:
 
-1. **Structure de graphe**: La fourmilière est essentiellement un graphe où:
-   - Les nœuds sont les salles (vestibule Sv, dortoir Sd, et salles intermédiaires)
-   - Les arêtes sont les tunnels entre les salles
-   
-2. **Contraintes**:
-   - Les fourmis démarrent toutes du vestibule
-   - Chaque salle intermédiaire ne peut contenir qu'une seule fourmi à la fois (sauf indication contraire)
-   - Une fourmi ne peut entrer dans une salle que si celle-ci est vide ou si sa seule occupante est en train de partir
-   - Les tunnels sont traversés instantanément
+1. **Graph Structure**: The anthill is essentially a graph where:
+   - Nodes are rooms (entrance hall Sv, dormitory Sd, and intermediate rooms)
+   - Edges are tunnels between rooms
 
-3. **Objectif**:
-   - Déplacer toutes les fourmis vers le dortoir en un minimum d'étapes
+2. **Constraints**:
+   - All ants start from the entrance hall
+   - Each intermediate room can only contain one ant at a time (unless specified otherwise)
+   - An ant can only enter a room if it's empty or if its only occupant is leaving
+   - Tunnels are crossed instantly
 
-## Approche algorithmique
+3. **Objective**:
+   - Move all ants to the dormitory in minimum steps
 
-Pour résoudre ce problème:
+## Algorithmic Approach
 
-1. Représenter la fourmilière comme un graphe
-2. Utiliser un algorithme de plus court chemin (comme BFS) pour déterminer les chemins optimaux
-3. Simuler le déplacement des fourmis en respectant les contraintes
-4. Optimiser l'ordre de déplacement des fourmis
+To solve this problem:
+
+1. Represent the anthill as a graph
+2. Use a shortest path algorithm (like BFS) to determine optimal paths
+3. Simulate ant movement while respecting constraints
+4. Optimize the order of ant movements
