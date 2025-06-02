@@ -1,0 +1,12 @@
+digraph "Class Diagram" {
+  node [shape=record, fontname=Helvetica, fontsize=10];
+  
+  Room [label="{Room|+ id : string\l+ capacity : int\l+ connections : vector\<string\>\l|+ Room()\l+ Room(id : string, capacity : int)\l+ addConnection(roomId : string) : void\l}"];
+  
+  Ant [label="{Ant|+ id : int\l+ currentRoom : string\l+ path : vector\<string\>\l|+ Ant(id : int)\l+ moveTo(room : string) : void\l}"];
+  
+  AntColony [label="{AntColony|- antCount : int\l- rooms : unordered_map\<string, Room\>\l- ants : vector\<Ant\>\l- steps : vector\<vector\<pair\<int, string\>\>\>\l|+ AntColony(filename : string)\l+ parseFile(filename : string) : void\l+ findOptimalPaths() : void\l+ simulateAntMovement() : void\l+ printSolution() : void\l+ generateGraph() : void\l}"];
+  
+  AntColony -> Room [label="contains", arrowhead="vee", style="dashed"];
+  AntColony -> Ant [label="contains", arrowhead="vee", style="dashed"];
+}

@@ -1,0 +1,15 @@
+PROJECT_NAME           = "Ant Colony Simulation"
+OUTPUT_DIRECTORY       = ./docs
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+HAVE_DOT               = YES
+UML_LOOK               = YES
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+GENERATE_LEGEND        = YES
+DOT_IMAGE_FORMAT       = svg
+INPUT                  = ./src/
+FILE_PATTERNS          = *.cpp *.hpp

@@ -1,0 +1,35 @@
+@startuml AntColony
+
+class Room {
+  + id: string
+  + capacity: int
+  + connections: vector<string>
+  + Room()
+  + Room(id: string, capacity: int)
+  + addConnection(roomId: string): void
+}
+
+class Ant {
+  + id: int
+  + currentRoom: string
+  + path: vector<string>
+  + Ant(id: int)
+  + moveTo(room: string): void
+}
+
+class AntColony {
+  - antCount: int
+  - rooms: unordered_map<string, Room>
+  - ants: vector<Ant>
+  - steps: vector<vector<pair<int, string>>>
+  + AntColony(filename: string)
+  + parseFile(filename: string): void
+  + findOptimalPaths(): void
+  + simulateAntMovement(): void
+  + printSolution(): void const
+  + generateGraph(): void const
+}
+
+AntColony o-- "0..*" Room : contains
+AntColony o-- "0..*" Ant : contains
+@enduml

@@ -1,0 +1,54 @@
+\doxysection{ants.\+hpp}
+\hypertarget{ants_8hpp_source}{}\label{ants_8hpp_source}\index{src/ants.hpp@{src/ants.hpp}}
+\mbox{\hyperlink{ants_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <queue>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_room_ac6ef93a7d9c3e1d624e025058d5f16ff}{Room}}\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ std::string\ \mbox{\hyperlink{class_room_a3579c9ee644f7071de7043fd46f617bd}{id}};}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_room_abac3fda2314e3f210ac93e2336b9df44}{capacity}};}
+\DoxyCodeLine{00013\ \ \ \ \ std::vector<std::string>\ \mbox{\hyperlink{class_room_a70defcd80c204b05bcce69aace1eb9b4}{connections}};}
+\DoxyCodeLine{00014\ \ \ \ \ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//\ Add\ default\ constructor}}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{class_room_ac6ef93a7d9c3e1d624e025058d5f16ff}{Room}}()\ :\ \mbox{\hyperlink{class_room_a3579c9ee644f7071de7043fd46f617bd}{id}}(\textcolor{stringliteral}{"{}"{}}),\ \mbox{\hyperlink{class_room_abac3fda2314e3f210ac93e2336b9df44}{capacity}}(0)\ \{\}}
+\DoxyCodeLine{00017\ \ \ \ \ }
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_room_ac6ef93a7d9c3e1d624e025058d5f16ff}{Room}}(\textcolor{keyword}{const}\ std::string\&\ \textcolor{keywordtype}{id},\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_room_abac3fda2314e3f210ac93e2336b9df44}{capacity}}\ =\ 1);}
+\DoxyCodeLine{00019\ \ \ \ \ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_room_a33068091ac61cc75751fb895a0ce91a8}{addConnection}}(\textcolor{keyword}{const}\ std::string\&\ roomId);}
+\DoxyCodeLine{00021\ \};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ant_aef94e0bc5fd27fe8d76c62cba0606964}{Ant}}\ \{}
+\DoxyCodeLine{00024\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ant_a7b274d8108b8b4299e3d09742223922b}{id}};}
+\DoxyCodeLine{00026\ \ \ \ \ std::string\ \mbox{\hyperlink{class_ant_ab8a898f02af845f2ecb65c1e0dd38647}{currentRoom}};}
+\DoxyCodeLine{00027\ \ \ \ \ std::vector<std::string>\ \mbox{\hyperlink{class_ant_aee5383e1ba1972010b22d1bd771c4202}{path}};}
+\DoxyCodeLine{00028\ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_ant_aef94e0bc5fd27fe8d76c62cba0606964}{Ant}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00030\ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ant_af781d5e129de388812d41498fd8860b8}{moveTo}}(\textcolor{keyword}{const}\ std::string\&\ room);}
+\DoxyCodeLine{00032\ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ant_colony_ae0fac7cf065ebc806cd5e79d070a9869}{AntColony}}\ \{}
+\DoxyCodeLine{00035\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_ant_colony_a1a4d3b274226844b380186e6f4876c4f}{antCount}};}
+\DoxyCodeLine{00037\ \ \ \ \ std::unordered\_map<std::string,\ Room>\ \mbox{\hyperlink{class_ant_colony_a5c76dc9ca9b2a60b90253eb0e3aa3b46}{rooms}};}
+\DoxyCodeLine{00038\ \ \ \ \ std::vector<Ant>\ \mbox{\hyperlink{class_ant_colony_a0a4ea77c6f78ab8a604a1643bb659cb1}{ants}};}
+\DoxyCodeLine{00039\ \ \ \ \ std::vector<std::vector<std::pair<int,\ std::string>>>\ \mbox{\hyperlink{class_ant_colony_a56c9dcc173c6eb689f8001fa033f2a87}{steps}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{class_ant_colony_ae0fac7cf065ebc806cd5e79d070a9869}{AntColony}}(\textcolor{keyword}{const}\ std::string\&\ filename);}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ant_colony_a1aece7b75c5d1c3c7051c3ae7f55661a}{parseFile}}(\textcolor{keyword}{const}\ std::string\&\ filename);}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ant_colony_a6082945aaee1440b6357687810ef11ee}{findOptimalPaths}}();}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ant_colony_a8b24fbd4cf306a25d3d57bc9e790e858}{simulateAntMovement}}();}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ant_colony_a706ce688e33e58aac9c3abc9a271871a}{printSolution}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ant_colony_a2c22cdbc339990ffce04197b3d761242}{generateGraph}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ \};}
+
+\end{DoxyCode}
