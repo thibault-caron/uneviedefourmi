@@ -1,10 +1,7 @@
-//
-// Created by gravy on 20/05/2025.
-//
 
-#include "Ant.h"
-#include "Room.h"
-#include "Anthill.h"
+#include "../include/Ant.h"
+#include "../include/Room.h"
+#include "../include/Anthill.h"
 
 Ant::Ant(std::string id, Room* current, Room* previous)
     : id_ant(id), current_room(current), previous_room(previous), canMove(true) {}

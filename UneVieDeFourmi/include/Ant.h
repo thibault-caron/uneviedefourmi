@@ -1,6 +1,3 @@
-//
-// Created by gravy on 20/05/2025.
-//
 
 #ifndef ANT_H
 #define ANT_H

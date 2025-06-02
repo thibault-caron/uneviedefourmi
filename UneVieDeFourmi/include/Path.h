@@ -1,6 +1,3 @@
-//
-// Created by gravy on 27/05/2025.
-//
 
 /**
  * @file path.h

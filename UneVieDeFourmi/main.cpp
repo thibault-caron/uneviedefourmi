@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
 #include <exception>
-#include "Anthill.h"
+#include "include/Anthill.h"
 
 int main() {
     try {
-        const std::string filename = "C:/Users/gravy/Desktop/PROJETS/FOURMIS/uneviedefourmi/Test/fourmilieres/fourmiliere_cinq.txt";
+        const std::string filename = "C:/Users/gravy/Desktop/PROJETS/FOURMIS/uneviedefourmi/UneVieDeFourmi/fourmilieres/fourmiliere_cinq.txt";
 
         // Create an anthill
         Anthill anthill0(filename);

@@ -1,6 +1,4 @@
-//
-// Created by gravy on 20/05/2025.
-//
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -8,9 +6,9 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
-#include "Room.h"
-#include "Ant.h"
-#include "Anthill.h"
+#include "../include/Room.h"
+#include "../include/Ant.h"
+#include "../include/Anthill.h"
 
 
 
@@ -411,7 +409,7 @@ void Anthill::findOptimalPaths() {
         int currentSteps = simulateAntsMovement(start, end);
 
         // Update the best solution if the current is better
-        if (firstTry || currentSteps <= minimumSteps) {
+        if (firstTry || currentSteps < minimumSteps) {
             minimumSteps = currentSteps;
             bestPathCount = n_paths;
             firstTry = false;

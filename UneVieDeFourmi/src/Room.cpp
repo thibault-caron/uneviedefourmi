@@ -1,10 +1,7 @@
-//
-// Created by gravy on 20/05/2025.
-//
 
-#include "Room.h"
-#include "Ant.h"
-#include "Anthill.h"
+#include "../include/Room.h"
+#include "../include/Ant.h"
+#include "../include/Anthill.h"
 
 Room::Room(const std::string& id, int size_max, int ants)
     : id_room(id), ANTS_MAX(size_max), ants_inside(ants) {}
